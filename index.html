@@ -25,15 +25,24 @@
     </div>
 
     <script>
-        function run() {
-            let htmlCode = document.getElementById("html-code").value;
-            let cssCode = document.getElementById("css-code").value;
-            let jsCode = document.getElementById("js-code").value;
-            let output = document.getElementById("output");
+        document.addEventListener("DOMContentLoaded", function() {
+            function run() {
+                let htmlCode = document.getElementById("html-code").value;
+                let cssCode = document.getElementById("css-code").value;
+                let jsCode = document.getElementById("js-code").value;
+                let output = document.getElementById("output");
 
-            output.contentDocument.body.innerHTML = htmlCode + "<style>" + cssCode + "</style>";
-            output.contentWindow.eval(jsCode);
-        }
+                let doc = output.contentDocument || output.contentWindow.document;
+                doc.open();
+                doc.write(htmlCode + "<style>" + cssCode + "</style><script>" + jsCode + "<\/script>");
+                doc.close();
+            }
+
+            // Attach the run function to the textarea keyup event
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('keyup', run);
+            });
+        });
     </script>
 </body>
 </html>
